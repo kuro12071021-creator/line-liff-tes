@@ -96,7 +96,7 @@
         <h2>🌸 ヤス日本語 🌸</h2>
         <p id="status">正在載入您的專屬資料...</p>
 
-        <!-- 功能按鈕選單 -->
+        <!-- 功能按鈕選單（已將聯絡老師改為上課視訊） -->
         <div class="menu-grid">
             <a href="#" id="btn-schedule" target="_blank" class="menu-btn" onclick="checkLink(event)">
                 <span>📅</span>我的課表
@@ -107,8 +107,8 @@
             <a href="#" id="btn-homework" target="_blank" class="menu-btn" onclick="checkLink(event)">
                 <span>📝</span>上傳作業
             </a>
-            <a href="#" class="menu-btn" onclick="contactTeacher(event)">
-                <span>💬</span>聯絡老師
+            <a href="#" id="btn-meet" target="_blank" class="menu-btn" onclick="checkLink(event)">
+                <span>💻</span>上課視訊
             </a>
         </div>
         <p class="user-id" id="user-id"></p>
@@ -156,6 +156,9 @@
                 if (data.homeworkUrl) {
                     document.getElementById('btn-homework').href = data.homeworkUrl;
                 }
+                if (data.meetUrl) {
+                    document.getElementById('btn-meet').href = data.meetUrl;
+                }
 
             } catch (error) {
                 document.getElementById('status').innerText = '載入資料發生錯誤';
@@ -169,16 +172,6 @@
             if (!url || url === "#") {
                 event.preventDefault();
                 alert('目前尚未設定您的專屬連結，請聯繫老師唷！');
-            }
-        }
-
-        // 聯絡老師按鈕：在 LINE 內直接關閉網頁回到對話框
-        function contactTeacher(event) {
-            event.preventDefault();
-            if (liff.isInClient()) {
-                liff.closeWindow();
-            } else {
-                window.location.href = "https://line.me/ti/p/你的LINEID";
             }
         }
 
