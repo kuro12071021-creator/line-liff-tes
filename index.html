@@ -101,10 +101,10 @@
             <a href="#" id="btn-drive" target="_blank" class="menu-btn" onclick="checkLink(event)">
                 <span>📚</span>課程教材
             </a>
-            <a href="https://forms.gle/你的作業表單" target="_blank" class="menu-btn">
+            <a href="#" id="btn-homework" target="_blank" class="menu-btn" onclick="checkLink(event)">
                 <span>📝</span>上傳作業
             </a>
-            <a href="https://line.me/ti/p/你的LINEID" target="_blank" class="menu-btn">
+            <a href="#" class="menu-btn" onclick="contactTeacher(event)">
                 <span>💬</span>聯絡老師
             </a>
         </div>
@@ -136,19 +136,22 @@
                 const lineId = profile.userId;
                 document.getElementById('user-id').innerText = `ID: ${lineId}`;
 
-                // 3. 向 Google Sheet 發送請求，順便帶上 LINE 名字以便自動註冊
+                // 3. 向 Google Sheet 發送請求，帶上 LineID 與名字進行自動對應
                 const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(profile.displayName)}`);
                 const data = await response.json();
 
                 // 4. 根據 Google Sheet 回傳的結果更新畫面
                 document.getElementById('status').innerText = `🌸 歡迎回來，${data.name}！`;
 
-                // 動態設定按鈕的專屬網址
+                // 動態設定各個按鈕的專屬網址
                 if (data.driveUrl) {
                     document.getElementById('btn-drive').href = data.driveUrl;
                 }
                 if (data.scheduleUrl) {
                     document.getElementById('btn-schedule').href = data.scheduleUrl;
+                }
+                if (data.homeworkUrl) {
+                    document.getElementById('btn-homework').href = data.homeworkUrl;
                 }
 
             } catch (error) {
@@ -163,6 +166,16 @@
             if (!url || url === "#") {
                 event.preventDefault();
                 alert('目前尚未設定您的專屬連結，請聯繫老師唷！');
+            }
+        }
+
+        // 聯絡老師按鈕：在 LINE 內直接關閉網頁回到對話框
+        function contactTeacher(event) {
+            event.preventDefault();
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                window.location.href = "https://line.me/ti/p/你的LINEID";
             }
         }
 
