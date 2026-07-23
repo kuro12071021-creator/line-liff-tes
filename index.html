@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヤス日本語 - 學習空間測試</title>
+    <!-- 引入 LINE LIFF SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+    <h2>🌸 歡迎來到 ヤス日本語</h2>
+    <p id="status">正在驗證您的身分...</p>
+    <h3 id="welcome-message" style="color: #ff6b81;"></h3>
+    <p id="user-id" style="color: gray; font-size: 12px;"></p>
 
+    <script>
+        async function main() {
+            try {
+                // 初始化 LIFF，填入你的 LIFF ID
+                await liff.init({ liffId: "2010817935-88LjVidu" });
+
+                // 檢查是否在 LINE 應用程式內或已登入
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+
+                // 取得使用者資料
+                const profile = await liff.getProfile();
+                
+                document.getElementById('status').innerText = '身分驗證成功！';
+                document.getElementById('welcome-message').innerText = `🌸 歡迎回來，${profile.displayName}！`;
+                document.getElementById('user-id').innerText = `LINE User ID: ${profile.userId}`;
+
+            } catch (error) {
+                document.getElementById('status').innerText = '初始化失敗：' + error.message;
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
