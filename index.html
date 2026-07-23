@@ -6,11 +6,10 @@
     <title>ヤス日本語 - 學生學習空間</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        /* 全局設定 - 米色背景 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #fdfcf0; /* 溫暖米色 */
-            color: #5c5043; /* 深可可色文字 */
+            background-color: #fdfcf0;
+            color: #5c5043;
             margin: 0;
             padding: 20px;
             text-align: center;
@@ -18,41 +17,36 @@
             flex-direction: column;
             min-height: 100vh;
         }
-        /* 主要內容容器 - 白色圓角卡片 */
         .container {
             max-width: 400px;
             margin: 30px auto;
             background: white;
             padding: 30px;
             border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(168, 143, 117, 0.15); /* 柔和陰影 */
+            box-shadow: 0 10px 25px rgba(168, 143, 117, 0.15);
             position: relative;
             z-index: 10;
         }
-        /* 標題樣式 */
         h2 {
-            color: #b89c7a; /* 奶茶金色 */
+            color: #b89c7a;
             margin-bottom: 5px;
             font-size: 1.6em;
         }
-        /* 歡迎訊息樣式 (優化過的狀態列) */
         #status {
             color: #8c7863;
             font-size: 15px;
             margin: 20px 0;
             font-weight: 500;
         }
-        /* 功能按鈕網格 */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-top: 30px;
         }
-        /* 按鈕樣式 - 米色系 */
         .menu-btn {
-            background: #fffaf0; /* 極淡米白 */
-            border: 2px solid #e8e0c9; /* 柔和邊框 */
+            background: #fffaf0;
+            border: 2px solid #e8e0c9;
             padding: 20px 15px;
             border-radius: 18px;
             font-size: 16px;
@@ -67,30 +61,25 @@
             justify-content: center;
             box-shadow: 0 4px 10px rgba(219, 206, 182, 0.3);
         }
-        /* 按鈕點擊效果 */
         .menu-btn:active {
             background: #e8e0c9;
             transform: translateY(2px);
             box-shadow: none;
         }
-        /* 按鈕內的表情符號放大 */
         .menu-btn span {
             font-size: 24px;
             margin-bottom: 8px;
         }
-        /* 底部裝飾插畫區域 */
         .footer-art {
-            margin-top: auto; /* 推到底部 */
+            margin-top: auto;
             padding-bottom: 20px;
             opacity: 0.7;
         }
-        /* 簡單的手繪風格插畫字 (用文字代替圖片，簡單快速) */
         .cute-doodle {
-            font-size: 40px; /* 大大的可愛圖案 */
+            font-size: 40px;
             letter-spacing: 15px;
             color: #d6cbbd;
         }
-        /* 用戶ID小字 */
         .user-id {
             color: #ccc;
             font-size: 10px;
@@ -102,27 +91,26 @@
 
     <div class="container">
         <h2>🌸 ヤス日本語 🌸</h2>
-        <p id="status">正在連線至 LINE...</p>
+        <p id="status">正在載入您的專屬資料...</p>
 
         <!-- 功能按鈕選單 -->
         <div class="menu-grid">
-            <a href="#" class="menu-btn" onclick="alert('功能開發中，敬請期待！')">
+            <a href="#" id="btn-schedule" target="_blank" class="menu-btn" onclick="checkLink(event)">
                 <span>📅</span>我的課表
             </a>
-            <a href="#" class="menu-btn" onclick="alert('功能開發中，敬請期待！')">
+            <a href="#" id="btn-drive" target="_blank" class="menu-btn" onclick="checkLink(event)">
                 <span>📚</span>課程教材
             </a>
-            <a href="#" class="menu-btn" onclick="alert('功能開發中，敬請期待！')">
+            <a href="https://forms.gle/你的作業表單" target="_blank" class="menu-btn">
                 <span>📝</span>上傳作業
             </a>
-            <a href="#" class="menu-btn" onclick="alert('功能開發中，敬請期待！')">
+            <a href="https://line.me/ti/p/你的LINEID" target="_blank" class="menu-btn">
                 <span>💬</span>聯絡老師
             </a>
         </div>
         <p class="user-id" id="user-id"></p>
     </div>
 
-    <!-- 底部裝飾插畫 -->
     <div class="footer-art">
         <div class="cute-doodle">
             ☕ 📚 🌸
@@ -130,28 +118,51 @@
     </div>
 
     <script>
+        // 把你剛剛得到的 Google Apps Script 網貼在下面引號內
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
+
         async function main() {
             try {
-                // 初始化 LIFF
+                // 1. 初始化 LIFF
                 await liff.init({ liffId: "2010817935-88LjVidu" });
 
                 if (!liff.isLoggedIn()) {
-                    // 如果沒登入，自動導向 LINE 登入
                     liff.login();
                     return;
                 }
 
-                // 取得用戶資料
+                // 2. 取得 LINE 個人資料
                 const profile = await liff.getProfile();
-                
-                // 成功後更新畫面
-                document.getElementById('status').innerText = `🌸 歡迎回來，${profile.displayName}！`;
-                document.getElementById('user-id').innerText = `ID: ${profile.userId}`;
+                const lineId = profile.userId;
+                document.getElementById('user-id').innerText = `ID: ${lineId}`;
+
+                // 3. 向 Google Sheet 發送請求，查詢這個 ID 的專屬資料
+                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}`);
+                const data = await response.json();
+
+                // 4. 根據 Google Sheet 回傳的結果更新畫面
+                document.getElementById('status').innerText = `🌸 歡迎回來，${data.name}！`;
+
+                // 動態設定按鈕的專屬網址
+                if (data.driveUrl) {
+                    document.getElementById('btn-drive').href = data.driveUrl;
+                }
+                if (data.scheduleUrl) {
+                    document.getElementById('btn-schedule').href = data.scheduleUrl;
+                }
 
             } catch (error) {
-                // 錯誤處理
-                document.getElementById('status').innerText = '初始化失敗，請重新嘗試';
-                console.error('LIFF Error:', error);
+                document.getElementById('status').innerText = '載入資料發生錯誤';
+                console.error('Error:', error);
+            }
+        }
+
+        // 防呆：如果試算表沒填網址就點擊時的提示
+        function checkLink(event) {
+            const url = event.currentTarget.getAttribute('href');
+            if (!url || url === "#") {
+                event.preventDefault();
+                alert('目前尚未設定您的專屬連結，請聯繫老師唷！');
             }
         }
 
