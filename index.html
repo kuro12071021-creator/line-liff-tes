@@ -118,7 +118,7 @@
     </div>
 
     <script>
-        // 把你剛剛得到的 Google Apps Script 網貼在下面引號內
+        // Google Apps Script 網頁應用程式網址
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
 
         async function main() {
@@ -136,8 +136,8 @@
                 const lineId = profile.userId;
                 document.getElementById('user-id').innerText = `ID: ${lineId}`;
 
-                // 3. 向 Google Sheet 發送請求，查詢這個 ID 的專屬資料
-                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}`);
+                // 3. 向 Google Sheet 發送請求，順便帶上 LINE 名字以便自動註冊
+                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(profile.displayName)}`);
                 const data = await response.json();
 
                 // 4. 根據 Google Sheet 回傳的結果更新畫面
