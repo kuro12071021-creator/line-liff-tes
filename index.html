@@ -3,34 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ヤス日本語 - 學習空間測試</title>
-    <!-- 引入 LINE LIFF SDK -->
+    <title>ヤス日本語 - 學生學習空間</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #fff9fb;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+        h2 {
+            color: #d46a84;
+            margin-bottom: 10px;
+        }
+        #welcome-message {
+            color: #ff6b81;
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .menu-btn {
+            background: #fff0f3;
+            border: 2px solid #ffb6c1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #d46a84;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-btn:active {
+            background: #ffb6c1;
+            color: white;
+        }
+        .user-id {
+            color: #888;
+            font-size: 11px;
+            margin-top: 20px;
+            word-break: break-all;
+        }
+    </style>
 </head>
-<body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
-    <h2>🌸 歡迎來到 ヤス日本語</h2>
-    <p id="status">正在驗證您的身分...</p>
-    <h3 id="welcome-message" style="color: #ff6b81;"></h3>
-    <p id="user-id" style="color: gray; font-size: 12px;"></p>
+<body>
+
+    <div class="container">
+        <h2>🌸 ヤス日本語</h2>
+        <p id="status" style="font-size: 14px; color: #666;">載入中...</p>
+        <h3 id="welcome-message"></h3>
+
+        <!-- 功能按鈕選單 -->
+        <div class="menu-grid">
+            <a href="#" class="menu-btn" onclick="alert('功能開發中！')">
+                <span>📅</span>我的課表
+            </a>
+            <a href="#" class="menu-btn" onclick="alert('功能開發中！')">
+                <span>📚</span>課程教材
+            </a>
+            <a href="#" class="menu-btn" onclick="alert('功能開發中！')">
+                <span>📝</span>上傳作業
+            </a>
+            <a href="#" class="menu-btn" onclick="alert('功能開發中！')">
+                <span>💬</span>聯絡老師
+            </a>
+        </div>
+
+        <p class="user-id" id="user-id"></p>
+    </div>
 
     <script>
         async function main() {
             try {
-                // 初始化 LIFF，填入你的 LIFF ID
                 await liff.init({ liffId: "2010817935-88LjVidu" });
 
-                // 檢查是否在 LINE 應用程式內或已登入
                 if (!liff.isLoggedIn()) {
                     liff.login();
                     return;
                 }
 
-                // 取得使用者資料
                 const profile = await liff.getProfile();
                 
-                document.getElementById('status').innerText = '身分驗證成功！';
-                document.getElementById('welcome-message').innerText = `🌸 歡迎回來，${profile.displayName}！`;
-                document.getElementById('user-id').innerText = `LINE User ID: ${profile.userId}`;
+                document.getElementById('status').innerText = '身分驗證成功';
+                document.getElementById('welcome-message').innerText = `歡迎回來，${profile.displayName}！`;
+                document.getElementById('user-id').innerText = `ID: ${profile.userId}`;
 
             } catch (error) {
                 document.getElementById('status').innerText = '初始化失敗：' + error.message;
