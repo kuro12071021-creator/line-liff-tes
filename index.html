@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>やす日本語 - 學生學習空間</title>
+    <title>マイコーナー - 學生學習空間</title>
     <!-- 引入日系文青圓體 Zen Maru Gothic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,12 +99,13 @@
 <body>
 
     <div class="container">
-        <h2>🌸 やす日本語 🌸</h2>
+        <h2>🌸 マイコーナー 🌸</h2>
         <p id="status">正在載入您的專屬資料...</p>
 
         <!-- 功能按鈕選單 -->
         <div class="menu-grid">
-            <a href="#" id="btn-schedule" target="_blank" class="menu-btn" onclick="checkLink(event)">
+            <!-- 課表按鈕改為觸發彈出視窗顯示下次上課時間 -->
+            <a href="#" id="btn-schedule" class="menu-btn" onclick="showSchedule(event)">
                 <span>📅</span>我的課表
             </a>
             <a href="#" id="btn-drive" target="_blank" class="menu-btn" onclick="checkLink(event)">
@@ -118,7 +119,7 @@
             </a>
         </div>
 
-        <!-- 移到卡片內部的可愛柴犬區塊 -->
+        <!-- 底部可愛柴犬區塊 -->
         <div class="footer-art">
             <div class="cute-shiba">
                 🐾 🐕 🐾
@@ -129,12 +130,13 @@
     </div>
 
     <script>
-        // Google Apps Script 網頁應用程式網址
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
+        
+        // 儲存從後台抓回來的上課時間資料
+        let studentSchedule = "";
 
         async function main() {
             try {
-                // 1. 初始化 LIFF
                 await liff.init({ liffId: "2010817935-88LjVidu" });
 
                 if (!liff.isLoggedIn()) {
@@ -142,21 +144,21 @@
                     return;
                 }
 
-                // 2. 取得 LINE 個人資料
                 const profile = await liff.getProfile();
                 const lineId = profile.userId;
                 document.getElementById('user-id').innerText = `ID: ${lineId}`;
 
-                // 3. 向 Google Sheet 發送請求
                 const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(profile.displayName)}`);
                 const data = await response.json();
 
-                // 4. 更新畫面
-                document.getElementById('status').innerText = `✨ 歡迎回來，${data.name}！`;
+                document.getElementById('status').innerText = `🌸 歡迎回來，${data.name}！`;
 
-                // 動態設定各個按鈕的專屬網址
+                // 儲存下次上課時間
+                if (data.scheduleUrl) {
+                    studentSchedule = data.scheduleUrl;
+                }
+
                 if (data.driveUrl) document.getElementById('btn-drive').href = data.driveUrl;
-                if (data.scheduleUrl) document.getElementById('btn-schedule').href = data.scheduleUrl;
                 if (data.homeworkUrl) document.getElementById('btn-homework').href = data.homeworkUrl;
                 if (data.meetUrl) document.getElementById('btn-meet').href = data.meetUrl;
 
@@ -166,7 +168,17 @@
             }
         }
 
-        // 防呆提示
+        // 點擊「我的課表」時彈出上課時間
+        function showSchedule(event) {
+            event.preventDefault();
+            if (studentSchedule) {
+                alert(`📅 本月上課時間：\n${studentSchedule}`);
+            } else {
+                alert('目前尚未設定您的下次上課時間，請聯繫老師唷！');
+            }
+        }
+
+        // 其他連結防呆提示
         function checkLink(event) {
             const url = event.currentTarget.getAttribute('href');
             if (!url || url === "#") {
