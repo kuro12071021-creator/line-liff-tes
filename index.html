@@ -94,6 +94,57 @@
             margin-top: 15px;
             margin-bottom: 0;
         }
+
+        /* 自訂美觀彈窗背景遮罩 */
+        #custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(92, 80, 67, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        /* 彈窗本體 */
+        .modal-content {
+            background: #fff;
+            padding: 25px 20px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .modal-title {
+            color: #b89c7a;
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .modal-text {
+            color: #5c5043;
+            font-size: 15px;
+            white-space: pre-line;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+            background: #fdfcf0;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .modal-btn {
+            background: #b89c7a;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -104,7 +155,6 @@
 
         <!-- 功能按鈕選單 -->
         <div class="menu-grid">
-            <!-- 課表按鈕改為觸發彈出視窗顯示下次上課時間 -->
             <a href="#" id="btn-schedule" class="menu-btn" onclick="showSchedule(event)">
                 <span>📅</span>我的課表
             </a>
@@ -129,10 +179,18 @@
         <p class="user-id" id="user-id"></p>
     </div>
 
+    <!-- 自訂彈跳視窗 -->
+    <div id="custom-modal">
+        <div class="modal-content">
+            <div class="modal-title">📅 本月上課時間</div>
+            <div id="modal-text" class="modal-text"></div>
+            <button class="modal-btn" onclick="closeModal()">確定</button>
+        </div>
+    </div>
+
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
         
-        // 儲存從後台抓回來的上課時間資料
         let studentSchedule = "";
 
         async function main() {
@@ -153,7 +211,6 @@
 
                 document.getElementById('status').innerText = `🌸 歡迎回來，${data.name}！`;
 
-                // 儲存下次上課時間
                 if (data.scheduleUrl) {
                     studentSchedule = data.scheduleUrl;
                 }
@@ -168,14 +225,21 @@
             }
         }
 
-        // 點擊「我的課表」時彈出上課時間
+        // 點擊「我的課表」時顯示自訂彈窗
         function showSchedule(event) {
             event.preventDefault();
             if (studentSchedule) {
-                alert(`📅 本月上課時間：\n${studentSchedule}`);
+                document.getElementById('modal-text').innerText = studentSchedule;
+                document.getElementById('custom-modal').style.display = 'flex';
             } else {
-                alert('目前尚未設定您的下次上課時間，請聯繫老師唷！');
+                document.getElementById('modal-text').innerText = '目前尚未設定您的本月上課時間，請聯繫老師唷！';
+                document.getElementById('custom-modal').style.display = 'flex';
             }
+        }
+
+        // 關閉彈窗
+        function closeModal() {
+            document.getElementById('custom-modal').style.display = 'none';
         }
 
         // 其他連結防呆提示
