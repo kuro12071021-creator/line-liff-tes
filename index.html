@@ -15,8 +15,8 @@
         }
         body {
             font-family: 'Zen Maru Gothic', sans-serif !important;
-            background-color: #fdfcf0;
-            color: #5c5043;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: #2d3748;
             margin: 0;
             padding: 20px;
             text-align: center;
@@ -29,73 +29,101 @@
         .container {
             width: 100%;
             max-width: 380px;
-            background: white;
+            background: #ffffff;
             padding: 35px 25px 25px 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(168, 143, 117, 0.15);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(44, 76, 126, 0.12);
             margin: auto;
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
         h2 {
-            color: #b89c7a;
+            color: #2b5c8f;
             margin-top: 0;
-            margin-bottom: 5px;
-            font-size: 1.6em;
+            margin-bottom: 8px;
+            font-size: 1.7em;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
+        }
+        
+        /* 歡迎狀態卡片 */
+        .welcome-card {
+            background: #f4f8fb;
+            border: 1px solid #dbeafe;
+            border-radius: 16px;
+            padding: 14px 15px;
+            margin: 15px 0 25px 0;
         }
         #status {
-            color: #8c7863;
+            color: #3b6e9c;
             font-size: 15px;
-            margin: 15px 0 30px 0;
-            font-weight: 500;
+            margin: 0;
+            font-weight: 700;
         }
+        .user-id {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 6px;
+            margin-bottom: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* 功能按鈕網格 */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
         .menu-btn {
-            background: #fffaf0;
-            border: 2px solid #e8e0c9;
-            padding: 25px 10px;
-            border-radius: 18px;
+            background: linear-gradient(145deg, #ffffff, #f7fafc);
+            border: 2px solid #cbd5e1;
+            padding: 24px 10px;
+            border-radius: 20px;
             font-size: 16px;
             font-weight: 700;
-            color: #786c5e;
+            color: #334155;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(219, 206, 182, 0.3);
+            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.15);
+        }
+        .menu-btn:hover {
+            border-color: #3b82f6;
+            color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);
         }
         .menu-btn:active {
-            background: #e8e0c9;
-            transform: translateY(2px);
+            background: #e2e8f0;
+            transform: translateY(1px);
             box-shadow: none;
         }
         .menu-btn span {
             font-size: 28px;
             margin-bottom: 8px;
         }
-        .footer-art {
-            margin-top: 25px;
-            opacity: 0.9;
-        }
-        .cute-shiba {
-            font-size: 26px;
-            letter-spacing: 8px;
-        }
-        .user-id {
-            color: #d1cbc1;
-            font-size: 10px;
-            margin-top: 15px;
-            margin-bottom: 0;
+        
+        /* Teams 按鈕專屬微調亮點 */
+        #btn-meet {
+            border-color: #93c5fd;
+            background: linear-gradient(145deg, #f0f7ff, #e0f2fe);
+            color: #1e40af;
         }
 
-        /* 自訂美觀彈窗背景遮罩 */
+        /* 底部裝飾 */
+        .footer-art {
+            margin-top: 25px;
+            opacity: 0.85;
+        }
+        .cute-whale {
+            font-size: 24px;
+            letter-spacing: 6px;
+        }
+
+        /* 自訂美觀彈跳視窗 */
         #custom-modal {
             display: none;
             position: fixed;
@@ -103,148 +131,76 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(92, 80, 67, 0.4);
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
-        /* 彈窗本體 */
         .modal-content {
-            background: #fff;
-            padding: 25px 20px;
-            border-radius: 20px;
-            width: 85%;
-            max-width: 320px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: #ffffff;
+            padding: 28px 22px;
+            border-radius: 24px;
+            width: 88%;
+            max-width: 330px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             text-align: center;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         .modal-title {
-            color: #b89c7a;
-            font-size: 1.2em;
+            color: #2b5c8f;
+            font-size: 1.25em;
             font-weight: 700;
             margin-bottom: 15px;
         }
         .modal-text {
-            color: #5c5043;
+            color: #334155;
             font-size: 15px;
             white-space: pre-line;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            line-height: 1.7;
+            margin-bottom: 22px;
             text-align: center;
-            background: #fdfcf0;
-            padding: 15px;
-            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 14px;
         }
         .modal-btn {
-            background: #b89c7a;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 20px;
+            padding: 11px 30px;
+            border-radius: 25px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+            transition: all 0.2s;
+        }
+        .modal-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>🌸 マイコーナー 🌸</h2>
-        <p id="status">正在載入您的專屬空間...</p>
+        <h2>💙 マイコーナー 💙</h2>
+        
+        <!-- 歡迎狀態專屬卡片 -->
+        <div class="welcome-card">
+            <p id="status">正在載入您的專屬空間...</p>
+            <p class="user-id" id="user-id"></p>
+        </div>
 
         <!-- 2大核心功能按鈕 -->
         <div class="menu-grid">
             <a href="#" id="btn-schedule" class="menu-btn" onclick="showSchedule(event)">
                 <span>📅</span>課程時間
             </a>
-            <a href="#" id="btn-meet" target="_blank" class="menu-btn" onclick="checkLink(event)">
-                <span>💻</span>Teams上課
-            </a>
-        </div>
-
-        <!-- 底部可愛柴犬區塊 -->
-        <div class="footer-art">
-            <div class="cute-shiba">
-                🐾 🐕 🐾
-            </div>
-        </div>
-
-        <p class="user-id" id="user-id"></p>
-    </div>
-
-    <!-- 自訂彈跳視窗 -->
-    <div id="custom-modal">
-        <div class="modal-content">
-            <div class="modal-title" id="modal-title">📅 課程時間</div>
-            <div id="modal-text" class="modal-text"></div>
-            <button class="modal-btn" onclick="closeModal()">確定</button>
-        </div>
-    </div>
-
-    <script>
-        // ==========================================
-        // 🛠️ 內容與連結設定區塊
-        // ==========================================
-        const CONFIG = {
-            // Microsoft Teams 上課會議連結
-            teamsUrl: "https://teams.live.com/l/invite/FEAQ495qcf0JrSf4g?v=g1", 
-            
-            // 點擊「課程時間」時彈出的文字內容（可自行修改）
-            scheduleText: "每週固定上課時間：\n請依約定時間準時上課唷！\n\n如有請假或調課需求，請提前聯繫老師 🌸"
-        };
-
-        async function main() {
-            try {
-                // 初始化 LIFF
-                await liff.init({ liffId: "2010817935-88LjVidu" });
-
-                if (!liff.isLoggedIn()) {
-                    liff.login();
-                    return;
-                }
-
-                // 取得 LINE 使用者名稱與 ID
-                const profile = await liff.getProfile();
-                const lineId = profile.userId;
-                const displayName = profile.displayName;
-                
-                document.getElementById('user-id').innerText = `ID: ${lineId}`;
-                document.getElementById('status').innerText = `🌸 歡迎回來，${displayName}！`;
-
-                // 套用 Teams 連結
-                if (CONFIG.teamsUrl && CONFIG.teamsUrl !== "https://") {
-                    document.getElementById('btn-meet').href = CONFIG.teamsUrl;
-                }
-
-            } catch (error) {
-                document.getElementById('status').innerText = '🌸 歡迎來到學生學習空間';
-                console.error('Error:', error);
-            }
-        }
-
-        // 點擊「課程時間」時顯示彈窗
-        function showSchedule(event) {
-            event.preventDefault();
-            document.getElementById('modal-text').innerText = CONFIG.scheduleText;
-            document.getElementById('custom-modal').style.display = 'flex';
-        }
-
-        // 關閉彈窗
-        function closeModal() {
-            document.getElementById('custom-modal').style.display = 'none';
-        }
-
-        // 連結尚未設定時的防呆提示
-        function checkLink(event) {
-            const url = event.currentTarget.getAttribute('href');
-            if (!url || url === "#" || url === "https://") {
-                event.preventDefault();
-                alert('目前尚未設定此專屬連結，請聯繫老師唷！');
-            }
-        }
-
-        main();
-    </script>
-</body>
-</html>
+            <!-- 固定的 Teams 上課連結 -->
