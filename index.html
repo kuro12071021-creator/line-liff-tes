@@ -204,3 +204,80 @@
                 <span>📅</span>課程時間
             </a>
             <!-- 固定的 Teams 上課連結 -->
+            <a href="https://teams.live.com/l/invite/FEAQ495qcf0JrSf4g?v=g1" id="btn-meet" target="_blank" class="menu-btn">
+                <span>💻</span>Teams上課
+            </a>
+        </div>
+
+        <!-- 底部藍色系清爽裝飾 -->
+        <div class="footer-art">
+            <div class="cute-whale">
+                🐳 💧 🐳
+            </div>
+        </div>
+    </div>
+
+    <!-- 自訂彈跳視窗 -->
+    <div id="custom-modal">
+        <div class="modal-content">
+            <div class="modal-title">📅 本月上課時間</div>
+            <div id="modal-text" class="modal-text">載入中...</div>
+            <button class="modal-btn" onclick="closeModal()">確定</button>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
+        
+        let studentSchedule = "";
+
+        async function main() {
+            try {
+                await liff.init({ liffId: "2010817935-88LjVidu" });
+
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+
+                const profile = await liff.getProfile();
+                const lineId = profile.userId;
+                document.getElementById('user-id').innerText = `ID: ${lineId}`;
+
+                // 透過 Google Apps Script 從試算表抓取該學生的專屬名字與課表
+                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(profile.displayName)}`);
+                const data = await response.json();
+
+                document.getElementById('status').innerText = `✨ 歡迎回來，${data.name}！`;
+
+                if (data.scheduleUrl) {
+                    studentSchedule = data.scheduleUrl;
+                }
+
+            } catch (error) {
+                document.getElementById('status').innerText = '✨ 歡迎來到學生學習空間';
+                console.error('Error:', error);
+            }
+        }
+
+        // 點擊「課程時間」時顯示專屬彈窗
+        function showSchedule(event) {
+            event.preventDefault();
+            if (studentSchedule) {
+                document.getElementById('modal-text').innerText = studentSchedule;
+                document.getElementById('custom-modal').style.display = 'flex';
+            } else {
+                document.getElementById('modal-text').innerText = '目前尚未設定您的本月上課時間，請聯繫老師唷！';
+                document.getElementById('custom-modal').style.display = 'flex';
+            }
+        }
+
+        // 關閉彈窗
+        function closeModal() {
+            document.getElementById('custom-modal').style.display = 'none';
+        }
+
+        main();
+    </script>
+</body>
+</html>
