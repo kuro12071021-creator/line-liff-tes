@@ -15,8 +15,8 @@
         }
         body {
             font-family: 'Zen Maru Gothic', sans-serif !important;
-            background: linear-gradient(135deg, #f0f6ff 0%, #e2effe 100%);
-            color: #3b4d61;
+            background: linear-gradient(135deg, #f3f8ff 0%, #e8f1fc 100%);
+            color: #4a5568;
             margin: 0;
             padding: 20px;
             text-align: center;
@@ -26,39 +26,45 @@
             align-items: center;
             min-height: 100vh;
         }
-        /* 主卡片：手繪有機邊框與偏移陰影 */
+        /* 主卡片：拿掉邊框，改用柔和圓角與清爽陰影 */
         .container {
             width: 100%;
             max-width: 380px;
             background: #ffffff;
             padding: 40px 25px 30px 25px;
-            border: 3px solid #3b82f6;
-            border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
-            box-shadow: 6px 6px 0px rgba(59, 130, 246, 0.2);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.08);
             margin: auto;
             position: relative;
         }
 
+        /* 標題帶點手繪裝飾 */
         h2 {
-            color: #1e40af;
+            color: #2b5c8f;
             margin-top: 0;
             margin-bottom: 5px;
-            font-size: 1.75em;
+            font-size: 1.7em;
             font-weight: 700;
             letter-spacing: 2px;
         }
+        .title-doodle {
+            font-size: 14px;
+            color: #60a5fa;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+        }
         
-        /* 歡迎狀態卡片：手繪筆記框風格 */
+        /* 歡迎狀態卡片：簡約手帳風 */
         .welcome-card {
-            background: #f8fbff;
-            border: 2px dashed #93c5fd;
+            background: #f7faff;
             border-radius: 20px;
-            padding: 15px;
-            margin: 20px 0 25px 0;
+            padding: 16px;
+            margin: 15px 0 25px 0;
+            box-shadow: inset 0 2px 4px rgba(59, 130, 246, 0.03);
         }
         #status {
-            color: #2b5c8f;
-            font-size: 16px;
+            color: #3b6e9c;
+            font-size: 15px;
             margin: 0;
             font-weight: 700;
         }
@@ -69,15 +75,15 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        /* 按鈕：手繪有機感邊框與硬陰影 */
+        /* 按鈕：柔和無邊框、微立體感 */
         .menu-btn {
-            background: #ffffff;
-            border: 2px solid #3b82f6;
-            border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+            background: #f8fbff;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
             padding: 24px 10px;
             font-size: 16px;
             font-weight: 700;
-            color: #1e3a8a;
+            color: #334155;
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
@@ -85,36 +91,38 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 4px 4px 0px rgba(59, 130, 246, 0.25);
+            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.08);
         }
         .menu-btn:hover {
             background: #eff6ff;
+            border-color: #93c5fd;
             transform: translateY(-2px);
-            box-shadow: 6px 6px 0px rgba(59, 130, 246, 0.35);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
         }
         .menu-btn:active {
-            transform: translateY(2px);
-            box-shadow: 2px 2px 0px rgba(59, 130, 246, 0.2);
+            transform: translateY(1px);
+            box-shadow: none;
         }
         .menu-btn span {
-            font-size: 30px;
+            font-size: 28px;
             margin-bottom: 8px;
         }
         
         /* Teams 按鈕特色藍色 */
         #btn-meet {
-            border-color: #2563eb;
             background: #f0f7ff;
+            border-color: #bfdbfe;
+            color: #1e40af;
         }
 
-        /* 底部可愛柴犬裝飾區塊 */
+        /* 底部可愛柴犬與手繪草皮裝飾 */
         .footer-art {
             margin-top: 25px;
             opacity: 0.9;
         }
         .cute-shiba {
             font-size: 24px;
-            letter-spacing: 10px;
+            letter-spacing: 8px;
         }
 
         /* 自訂美觀彈跳視窗 */
@@ -134,11 +142,10 @@
         .modal-content {
             background: #ffffff;
             padding: 28px 22px;
-            border: 3px solid #3b82f6;
-            border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+            border-radius: 26px;
             width: 88%;
             max-width: 330px;
-            box-shadow: 8px 8px 0px rgba(59, 130, 246, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
             text-align: center;
             animation: modalIn 0.3s ease;
         }
@@ -147,7 +154,7 @@
             to { transform: scale(1); opacity: 1; }
         }
         .modal-title {
-            color: #1e40af;
+            color: #2b5c8f;
             font-size: 1.25em;
             font-weight: 700;
             margin-bottom: 15px;
@@ -159,21 +166,20 @@
             line-height: 1.7;
             margin-bottom: 22px;
             text-align: center;
-            background: #f8fbff;
-            border: 2px dashed #93c5fd;
+            background: #f7faff;
             padding: 16px;
-            border-radius: 20px;
+            border-radius: 18px;
         }
         .modal-btn {
             background: #3b82f6;
             color: white;
-            border: 2px solid #1d4ed8;
-            padding: 10px 30px;
-            border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+            border: none;
+            padding: 11px 30px;
+            border-radius: 20px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 3px 3px 0px #1e3a8a;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             transition: all 0.2s;
         }
         .modal-btn:hover {
@@ -185,7 +191,9 @@
 <body>
 
     <div class="container">
+        <!-- 標題與手繪風小裝飾 -->
         <h2>マイコーナー</h2>
+        <div class="title-doodle">☁️ 🌟 🍀</div>
         
         <!-- 歡迎狀態卡片 -->
         <div class="welcome-card">
@@ -225,7 +233,7 @@
         
         let studentSchedule = "";
 
-        // 1. 瞬間讀取本地快取（名字與課表），實現秒開
+        // 1. 本地快取秒開
         const cachedName = localStorage.getItem('student_name');
         const cachedSchedule = localStorage.getItem('student_schedule');
         const cachedLineId = localStorage.getItem('student_line_id');
@@ -237,7 +245,6 @@
             studentSchedule = cachedSchedule;
         }
 
-        // 如果之前已經存過 lineId，直接在背景秒發請求，完全不用等 LINE 初始化！
         if (cachedLineId) {
             fetchDataInBackground(cachedLineId, cachedName || "學生");
         }
@@ -254,10 +261,8 @@
                 const profile = await liff.getProfile();
                 const lineId = profile.userId;
                 
-                // 儲存 lineId 供下次秒開使用
                 localStorage.setItem('student_line_id', lineId);
 
-                // 如果剛剛沒有快取 lineId，現在才發請求；或者確保資料最新
                 if (!cachedLineId) {
                     fetchDataInBackground(lineId, profile.displayName);
                 }
@@ -270,7 +275,6 @@
             }
         }
 
-        // 背景非同步請求函數
         async function fetchDataInBackground(lineId, displayName) {
             try {
                 const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(displayName)}`);
