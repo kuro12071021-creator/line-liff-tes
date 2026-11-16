@@ -26,7 +26,7 @@
             align-items: center;
             min-height: 100vh;
         }
-        /* 主卡片：拿掉邊框，改用柔和圓角與清爽陰影 */
+        /* 主卡片：柔和圓角與清爽陰影 */
         .container {
             width: 100%;
             max-width: 380px;
@@ -115,7 +115,7 @@
             color: #1e40af;
         }
 
-        /* 底部可愛柴犬與手繪草皮裝飾 */
+        /* 底部可愛柴犬裝飾區塊 */
         .footer-art {
             margin-top: 25px;
             opacity: 0.9;
@@ -191,13 +191,12 @@
 <body>
 
     <div class="container">
-        <!-- 標題與手繪風小裝飾 -->
         <h2>マイコーナー</h2>
         <div class="title-doodle">☁️ 🌟 🍀</div>
         
         <!-- 歡迎狀態卡片 -->
         <div class="welcome-card">
-            <p id="status">正在載入您的專屬空間...</p>
+            <p id="status">正在同步您的專屬資料...</p>
         </div>
 
         <!-- 2大核心功能按鈕 -->
@@ -233,22 +232,6 @@
         
         let studentSchedule = "";
 
-        // 1. 本地快取秒開
-        const cachedName = localStorage.getItem('student_name');
-        const cachedSchedule = localStorage.getItem('student_schedule');
-        const cachedLineId = localStorage.getItem('student_line_id');
-
-        if (cachedName) {
-            document.getElementById('status').innerText = `✨ 歡迎回來，${cachedName}！`;
-        }
-        if (cachedSchedule) {
-            studentSchedule = cachedSchedule;
-        }
-
-        if (cachedLineId) {
-            fetchDataInBackground(cachedLineId, cachedName || "學生");
-        }
-
         async function main() {
             try {
                 await liff.init({ liffId: "2010817935-88LjVidu" });
@@ -260,49 +243,34 @@
 
                 const profile = await liff.getProfile();
                 const lineId = profile.userId;
-                
-                localStorage.setItem('student_line_id', lineId);
 
-                if (!cachedLineId) {
-                    fetchDataInBackground(lineId, profile.displayName);
-                }
-
-            } catch (error) {
-                if (!cachedName) {
-                    document.getElementById('status').innerText = `✨ 歡迎回來！`;
-                }
-                console.error('Error:', error);
-            }
-        }
-
-        async function fetchDataInBackground(lineId, displayName) {
-            try {
-                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(displayName)}`);
+                // 每次都直接從 Google 雲端試算表即時抓取最新資料
+                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(profile.displayName)}`);
                 const data = await response.json();
 
                 if (data.name) {
                     document.getElementById('status').innerText = `✨ 歡迎回來，${data.name}！`;
-                    localStorage.setItem('student_name', data.name);
+                } else {
+                    document.getElementById('status').innerText = `✨ 歡迎回來，${profile.displayName}！`;
                 }
 
                 if (data.scheduleUrl) {
                     studentSchedule = data.scheduleUrl;
-                    localStorage.setItem('student_schedule', data.scheduleUrl);
+                } else {
+                    studentSchedule = '目前尚未設定您的本月上課時間，請聯繫老師唷！';
                 }
-            } catch (e) {
-                console.error('Background fetch error:', e);
+
+            } catch (error) {
+                document.getElementById('status').innerText = `✨ 歡迎回來！`;
+                studentSchedule = '目前無法取得上課時間，請稍後再試或聯繫老師唷！';
+                console.error('Error:', error);
             }
         }
 
         function showSchedule(event) {
             event.preventDefault();
-            if (studentSchedule) {
-                document.getElementById('modal-text').innerText = studentSchedule;
-                document.getElementById('custom-modal').style.display = 'flex';
-            } else {
-                document.getElementById('modal-text').innerText = '目前尚未設定您的本月上課時間，請聯繫老師唷！';
-                document.getElementById('custom-modal').style.display = 'flex';
-            }
+            document.getElementById('modal-text').innerText = studentSchedule || '目前尚未設定您的本月上課時間，請聯繫老師唷！';
+            document.getElementById('custom-modal').style.display = 'flex';
         }
 
         function closeModal() {
