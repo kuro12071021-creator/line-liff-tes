@@ -30,7 +30,7 @@
             width: 100%;
             max-width: 380px;
             background: white;
-            padding: 30px 25px 20px 25px;
+            padding: 35px 25px 25px 25px;
             border-radius: 25px;
             box-shadow: 0 10px 25px rgba(168, 143, 117, 0.15);
             margin: auto;
@@ -46,7 +46,7 @@
         #status {
             color: #8c7863;
             font-size: 15px;
-            margin: 15px 0 25px 0;
+            margin: 15px 0 30px 0;
             font-weight: 500;
         }
         .menu-grid {
@@ -57,9 +57,9 @@
         .menu-btn {
             background: #fffaf0;
             border: 2px solid #e8e0c9;
-            padding: 18px 10px;
+            padding: 25px 10px;
             border-radius: 18px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             color: #786c5e;
             cursor: pointer;
@@ -77,11 +77,11 @@
             box-shadow: none;
         }
         .menu-btn span {
-            font-size: 24px;
-            margin-bottom: 6px;
+            font-size: 28px;
+            margin-bottom: 8px;
         }
         .footer-art {
-            margin-top: 20px;
+            margin-top: 25px;
             opacity: 0.9;
         }
         .cute-shiba {
@@ -132,7 +132,7 @@
             margin-bottom: 20px;
             text-align: center;
             background: #fdfcf0;
-            padding: 12px;
+            padding: 15px;
             border-radius: 12px;
         }
         .modal-btn {
@@ -151,21 +151,15 @@
 
     <div class="container">
         <h2>🌸 マイコーナー 🌸</h2>
-        <p id="status">正在載入您的專屬資料...</p>
+        <p id="status">正在載入您的專屬空間...</p>
 
-        <!-- 功能按鈕選單 -->
+        <!-- 2大核心功能按鈕 -->
         <div class="menu-grid">
             <a href="#" id="btn-schedule" class="menu-btn" onclick="showSchedule(event)">
-                <span>📅</span>我的課表
-            </a>
-            <a href="#" id="btn-drive" target="_blank" class="menu-btn" onclick="checkLink(event)">
-                <span>📚</span>課程教材
-            </a>
-            <a href="#" id="btn-homework" target="_blank" class="menu-btn" onclick="checkLink(event)">
-                <span>📝</span>上傳作業
+                <span>📅</span>課程時間
             </a>
             <a href="#" id="btn-meet" target="_blank" class="menu-btn" onclick="checkLink(event)">
-                <span>💻</span>上課視訊
+                <span>💻</span>Teams上課
             </a>
         </div>
 
@@ -182,19 +176,27 @@
     <!-- 自訂彈跳視窗 -->
     <div id="custom-modal">
         <div class="modal-content">
-            <div class="modal-title">📅 本月上課時間</div>
+            <div class="modal-title" id="modal-title">📅 課程時間</div>
             <div id="modal-text" class="modal-text"></div>
             <button class="modal-btn" onclick="closeModal()">確定</button>
         </div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
-        
-        let studentSchedule = "";
+        // ==========================================
+        // 🛠️ 內容與連結設定區塊
+        // ==========================================
+        const CONFIG = {
+            // Microsoft Teams 上課會議連結
+            teamsUrl: "https://teams.live.com/l/invite/FEAQ495qcf0JrSf4g?v=g1", 
+            
+            // 點擊「課程時間」時彈出的文字內容（可自行修改）
+            scheduleText: "每週固定上課時間：\n請依約定時間準時上課唷！\n\n如有請假或調課需求，請提前聯繫老師 🌸"
+        };
 
         async function main() {
             try {
+                // 初始化 LIFF
                 await liff.init({ liffId: "2010817935-88LjVidu" });
 
                 if (!liff.isLoggedIn()) {
@@ -202,39 +204,30 @@
                     return;
                 }
 
+                // 取得 LINE 使用者名稱與 ID
                 const profile = await liff.getProfile();
                 const lineId = profile.userId;
+                const displayName = profile.displayName;
+                
                 document.getElementById('user-id').innerText = `ID: ${lineId}`;
+                document.getElementById('status').innerText = `🌸 歡迎回來，${displayName}！`;
 
-                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(profile.displayName)}`);
-                const data = await response.json();
-
-                document.getElementById('status').innerText = `🌸 歡迎回來，${data.name}！`;
-
-                if (data.scheduleUrl) {
-                    studentSchedule = data.scheduleUrl;
+                // 套用 Teams 連結
+                if (CONFIG.teamsUrl && CONFIG.teamsUrl !== "https://") {
+                    document.getElementById('btn-meet').href = CONFIG.teamsUrl;
                 }
 
-                if (data.driveUrl) document.getElementById('btn-drive').href = data.driveUrl;
-                if (data.homeworkUrl) document.getElementById('btn-homework').href = data.homeworkUrl;
-                if (data.meetUrl) document.getElementById('btn-meet').href = data.meetUrl;
-
             } catch (error) {
-                document.getElementById('status').innerText = '載入資料發生錯誤';
+                document.getElementById('status').innerText = '🌸 歡迎來到學生學習空間';
                 console.error('Error:', error);
             }
         }
 
-        // 點擊「我的課表」時顯示自訂彈窗
+        // 點擊「課程時間」時顯示彈窗
         function showSchedule(event) {
             event.preventDefault();
-            if (studentSchedule) {
-                document.getElementById('modal-text').innerText = studentSchedule;
-                document.getElementById('custom-modal').style.display = 'flex';
-            } else {
-                document.getElementById('modal-text').innerText = '目前尚未設定您的本月上課時間，請聯繫老師唷！';
-                document.getElementById('custom-modal').style.display = 'flex';
-            }
+            document.getElementById('modal-text').innerText = CONFIG.scheduleText;
+            document.getElementById('custom-modal').style.display = 'flex';
         }
 
         // 關閉彈窗
@@ -242,12 +235,12 @@
             document.getElementById('custom-modal').style.display = 'none';
         }
 
-        // 其他連結防呆提示
+        // 連結尚未設定時的防呆提示
         function checkLink(event) {
             const url = event.currentTarget.getAttribute('href');
-            if (!url || url === "#") {
+            if (!url || url === "#" || url === "https://") {
                 event.preventDefault();
-                alert('目前尚未設定您的專屬連結，請聯繫老師唷！');
+                alert('目前尚未設定此專屬連結，請聯繫老師唷！');
             }
         }
 
