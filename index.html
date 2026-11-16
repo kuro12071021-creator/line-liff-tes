@@ -185,7 +185,6 @@
 <body>
 
     <div class="container">
-        <!-- 已移除愛心 -->
         <h2>マイコーナー</h2>
         
         <!-- 歡迎狀態卡片 -->
@@ -222,4 +221,91 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAWlvG0fo23ZKtjjU9rj7RUVKWHB9y2-NoSW4-g0BA13vWOXC3Z7_JzfTAqjIP2_g/exec";
+        
+        let studentSchedule = "";
+
+        // 1. 瞬間讀取本地快取（名字與課表），實現秒開
+        const cachedName = localStorage.getItem('student_name');
+        const cachedSchedule = localStorage.getItem('student_schedule');
+        const cachedLineId = localStorage.getItem('student_line_id');
+
+        if (cachedName) {
+            document.getElementById('status').innerText = `✨ 歡迎回來，${cachedName}！`;
+        }
+        if (cachedSchedule) {
+            studentSchedule = cachedSchedule;
+        }
+
+        // 如果之前已經存過 lineId，直接在背景秒發請求，完全不用等 LINE 初始化！
+        if (cachedLineId) {
+            fetchDataInBackground(cachedLineId, cachedName || "學生");
+        }
+
+        async function main() {
+            try {
+                await liff.init({ liffId: "2010817935-88LjVidu" });
+
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+
+                const profile = await liff.getProfile();
+                const lineId = profile.userId;
+                
+                // 儲存 lineId 供下次秒開使用
+                localStorage.setItem('student_line_id', lineId);
+
+                // 如果剛剛沒有快取 lineId，現在才發請求；或者確保資料最新
+                if (!cachedLineId) {
+                    fetchDataInBackground(lineId, profile.displayName);
+                }
+
+            } catch (error) {
+                if (!cachedName) {
+                    document.getElementById('status').innerText = `✨ 歡迎回來！`;
+                }
+                console.error('Error:', error);
+            }
+        }
+
+        // 背景非同步請求函數
+        async function fetchDataInBackground(lineId, displayName) {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?lineId=${lineId}&name=${encodeURIComponent(displayName)}`);
+                const data = await response.json();
+
+                if (data.name) {
+                    document.getElementById('status').innerText = `✨ 歡迎回來，${data.name}！`;
+                    localStorage.setItem('student_name', data.name);
+                }
+
+                if (data.scheduleUrl) {
+                    studentSchedule = data.scheduleUrl;
+                    localStorage.setItem('student_schedule', data.scheduleUrl);
+                }
+            } catch (e) {
+                console.error('Background fetch error:', e);
+            }
+        }
+
+        function showSchedule(event) {
+            event.preventDefault();
+            if (studentSchedule) {
+                document.getElementById('modal-text').innerText = studentSchedule;
+                document.getElementById('custom-modal').style.display = 'flex';
+            } else {
+                document.getElementById('modal-text').innerText = '目前尚未設定您的本月上課時間，請聯繫老師唷！';
+                document.getElementById('custom-modal').style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').style.display = 'none';
+        }
+
+        main();
+    </script>
+</body>
+</html>
